@@ -1,10 +1,11 @@
 import express from "express"
-import db from  "db.js"
+import db from  "../db.js"
 
 const router = express.Router()
 
-function enviarMensagem(req,res,next) {
-    
+async function enviarMensagem(req,res,next) {
+    const token = req.headers.authorization.split(" ")[1]
+    console.log(token)
 }
 
 export default router

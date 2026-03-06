@@ -15,10 +15,8 @@ async function logar(req,res) {
             "segredo",
             { expiresIn : "1h"})
             return res.status(200).json({message: "logado com sucesso",token: acesso})
-            
         } else {
             return res.status(401).json({message: "Usuario inexistente"})
-            
         }
     } catch (erro) {
         console.error(erro)
@@ -32,13 +30,7 @@ async function cadastrar(req,res) {
         const {email,senha,nome} = req.body
         const [resultado] = await db.query("INSERT INTO usuarios(nome,email,senha) VALUES(?,?,?)", [nome,email,senha])
         if (resultado.affectedRows > 0) {
-            const [result] = await db.query("SELECT id FROM usuarios WHERE email = ? ", [email])
-            console.log(result.id)
-            const token = jwt.sign({
-                email: email,
-                id : result.id
-            }, "segredo", {expiresIn: "1h"})
-            res.status(201).json({message: "Cadastrado com sucessso", token: token})
+            res.status(201).json({message: "Cadastrado com sucessso"})
         }
     } catch (erro) {
         console.error(erro)
