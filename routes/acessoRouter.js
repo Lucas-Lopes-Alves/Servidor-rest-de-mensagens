@@ -10,8 +10,7 @@ async function logar(req,res) {
         const [resultado] = await db.query("SELECT * FROM usuarios WHERE email = ? AND senha = ?", [email,senha])
         if (resultado.length > 0) {
             const acesso = jwt.sign({
-                id: resultado.id,
-                email: resultado.email},
+                email: resultado[0].email},
             "segredo",
             { expiresIn : "1h"})
             return res.status(200).json({status: "Logado com sucesso",token: acesso})
