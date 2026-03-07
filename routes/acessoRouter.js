@@ -11,12 +11,12 @@ async function logar(req,res) {
         if (resultado.length > 0) {
             const acesso = jwt.sign({
                 id: resultado.id,
-                email: email},
+                email: resultado.email},
             "segredo",
             { expiresIn : "1h"})
-            return res.status(200).json({message: "logado com sucesso",token: acesso})
+            return res.status(200).json({status: "Logado com sucesso",token: acesso})
         } else {
-            return res.status(401).json({message: "Usuario inexistente"})
+            return res.status(401).json({status: "Usuario inexistente"})
         }
     } catch (erro) {
         console.error(erro)
@@ -30,11 +30,14 @@ async function cadastrar(req,res) {
         const {email,senha,nome} = req.body
         const [resultado] = await db.query("INSERT INTO usuarios(nome,email,senha) VALUES(?,?,?)", [nome,email,senha])
         if (resultado.affectedRows > 0) {
-            res.status(201).json({message: "Cadastrado com sucessso"})
+            res.status(201).json({status: "Cadastrado com sucessso"})
+        } else {
+            res.status(401).json({status: "Erro ao cadastrar"})
         }
     } catch (erro) {
-        console.error(erro)
-        res.send(400).json({message: "Erro ao cadastrar"})
+        if (erro.code === "ER_DUP_ENTRY"){
+            res.status(400).json({status: "Email ou nome de usuario indisponivel"})
+        }
     }
 }
 

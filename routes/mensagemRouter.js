@@ -1,11 +1,15 @@
 import express from "express"
 import db from  "../db.js"
+import jwt from "jsonwebtoken"
 
 const router = express.Router()
 
 async function enviarMensagem(req,res,next) {
-    const token = req.headers.authorization.split(" ")[1]
-    console.log(token)
+    const bearer = req.headers.authorization
+    const token = bearer.split(" ")[1]
+    const webToken = jwt.verify(token, "segredo")
 }
+
+router.post('/enviar',enviarMensagem)
 
 export default router
