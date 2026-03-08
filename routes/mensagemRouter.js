@@ -4,11 +4,19 @@ import jwt from "jsonwebtoken"
 
 const router = express.Router()
 
+
+/*
+    função que envia a mensagem do usuario para o banco de dados
+    e caso o usúario não exista ou o token esteja expirado
+    o envio da mensagem não será realizado
+*/
 async function enviarMensagem(req, res) {
     const bearer = req.headers.authorization
     const token = bearer.split(" ")[1]
     const webToken = jwt.verify(token, "segredo")
+
     const message = req.body.mensagem
+
     const [query] = await db.query("SELECT * FROM usuarios WHERE email = ?", [webToken.email])
     if (query.length > 0) {
         const id = query[0].id
@@ -17,6 +25,7 @@ async function enviarMensagem(req, res) {
     } else {
         res.status(401).json({ message: "Usuario inexistente" })
     }
+    
 }
 
 router.post('/enviar', enviarMensagem)
