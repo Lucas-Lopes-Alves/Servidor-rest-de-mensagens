@@ -4,13 +4,6 @@ import jwt from "jsonwebtoken"
 
 const router = express.Router()
 
-/*
-
-[
-    {id:4,nome:"lucas",email:"email@email",senha:"12345"}
-]
-query[0].id
-*/
 async function enviarMensagem(req, res) {
     const bearer = req.headers.authorization
     const token = bearer.split(" ")[1]
