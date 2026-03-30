@@ -13,11 +13,11 @@ const router = express.Router()
 async function logar(req,res) {
     try {
         const {email,senha} = req.body
-        const [resultado] = await db.query("SELECT * FROM usuarios WHERE email = ? AND senha = ?", [email,senha])
+        const [resultado] = await db.execute("SELECT * FROM usuarios WHERE email = ? AND senha = ?", [email,senha])
         if (resultado.length > 0) {
             const acesso = jwt.sign({
                 email: resultado[0].email},
-            "segredo",
+            process.env.SECRET,
             { expiresIn : "1h"})
             return res.status(200).json({message: "Logado com sucesso",token: acesso})
         } else {
@@ -38,7 +38,7 @@ async function logar(req,res) {
 async function cadastrar(req,res) {
     try {
         const {email,senha,nome} = req.body
-        const [resultado] = await db.query("INSERT INTO usuarios(nome,email,senha) VALUES(?,?,?)", [nome,email,senha])
+        const [resultado] = await db.execute("INSERT INTO usuarios(nome,email,senha) VALUES(?,?,?)", [nome,email,senha])
         if (resultado.affectedRows > 0) {
             return res.status(201).json({message: "Cadastrado com sucessso"})
         } else {
