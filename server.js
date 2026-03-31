@@ -14,6 +14,8 @@ app.use("/",acesso)
 app.use("/logged/", mensagem)
 app.use(get)
 
-app.listen(porta, ()=>{
-    console.log(`Servidor rodando na porta ${porta}`)
-})
+// app.listen(porta, ()=>{
+//     console.log(`Servidor rodando na porta ${porta}`)
+// })
+
+export default app
